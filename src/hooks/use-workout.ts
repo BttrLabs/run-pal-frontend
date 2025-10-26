@@ -18,7 +18,7 @@ export function useWorkout(slug: string | null) {
   const fetcher = async (url: string) => {
     if (!slug) throw new Error("No slug");
     try {
-      const res = await axios.get<SingleWorkoutResponse>(`${url}/${slug}`, {
+      const res = await axios.get<SingleWorkoutResponse>(`${url}`, {
         withCredentials: true,
       });
       return res.data;
