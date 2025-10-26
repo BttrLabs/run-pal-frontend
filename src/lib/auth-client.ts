@@ -6,7 +6,7 @@ import {
 import { nextCookies } from "better-auth/next-js";
 
 export const authClient = createAuthClient({
-  baseURL: "http://localhost:8787",
+  baseURL: process.env.NEXT_PUBLIC_BASE_URL!,
   plugins: [magicLinkClient(), lastLoginMethodClient(), nextCookies()],
 });
 
