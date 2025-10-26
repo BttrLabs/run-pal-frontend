@@ -20,12 +20,11 @@ interface DataTableRowActionsProps<TData> {
 }
 
 export function DataTableRowActions<TData>({
-  row,
   onDelete,
   onCopy,
 }: DataTableRowActionsProps<TData>) {
-  const t = useTranslations('Common');
-  
+  const t = useTranslations("Common");
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -34,14 +33,14 @@ export function DataTableRowActions<TData>({
           className="flex h-8 w-8 p-0 data-[state=open]:bg-muted"
         >
           <MoreHorizontal />
-          <span className="sr-only">{t('openMenu')}</span>
+          <span className="sr-only">{t("openMenu")}</span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="">
-        <DropdownMenuItem>{t('edit')}</DropdownMenuItem>
-        <DropdownMenuItem onClick={onCopy}>{t('makeACopy')}</DropdownMenuItem>
+        <DropdownMenuItem>{t("edit")}</DropdownMenuItem>
+        <DropdownMenuItem onClick={onCopy}>{t("makeACopy")}</DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={onDelete}>{t('delete')}</DropdownMenuItem>
+        <DropdownMenuItem onClick={onDelete}>{t("delete")}</DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );

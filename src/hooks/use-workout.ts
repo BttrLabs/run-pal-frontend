@@ -15,19 +15,16 @@ export type SingleWorkoutResponse = {
 export function useWorkout(slug: string | null) {
   const router = useRouter();
 
-  const fetcher = async (): Promise<SingleWorkoutResponse> => {
+  const fetcher = async (url: string) => {
     if (!slug) throw new Error("No slug");
     try {
       const res = await axios.get<SingleWorkoutResponse>(`${url}/${slug}`, {
         withCredentials: true,
       });
       return res.data;
-    } catch (err: any) {
-      if (axios.isAxiosError(err) && err.response?.status === 404) {
-        throw new Error("Workout not found");
-      } else {
-        throw new Error("Failed to fetch workout");
-      }
+    } catch {
+      toast.error("Failed to fetch intervals.");
+      return null;
     }
   };
 

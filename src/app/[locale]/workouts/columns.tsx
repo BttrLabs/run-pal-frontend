@@ -3,18 +3,18 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { formatDateGerman } from "@/lib/utils";
 import { Workout } from "@/app/[locale]/workouts/data/schema";
-import { DataTableColumnHeader } from "@/components/data-table-column-header";
+import { DataTableColumnHeader } from "@/components/data-table/data-table-column-header";
 import { DataTableRowActions } from "@/app/[locale]/workouts/components/data-table-row-actions";
 
 export const getWorkoutColumns = (
   onDelete: (slug: string) => void,
   onCopy: (slug: string) => void,
-  t: (key: string) => string
+  t: (key: string) => string,
 ): ColumnDef<Workout>[] => [
   {
     accessorKey: "workout_number",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title={t('workoutNumber')} />
+      <DataTableColumnHeader column={column} title={t("workoutNumber")} />
     ),
     cell: ({ row }) => <div>{row.getValue("workout_number")}</div>,
     enableSorting: true,
@@ -23,7 +23,7 @@ export const getWorkoutColumns = (
   {
     accessorKey: "name",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title={t('name')} />
+      <DataTableColumnHeader column={column} title={t("name")} />
     ),
     cell: ({ row }) => (
       <span className="max-w-[500px] truncate font-medium">
@@ -34,7 +34,7 @@ export const getWorkoutColumns = (
   {
     accessorKey: "description",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title={t('description')} />
+      <DataTableColumnHeader column={column} title={t("description")} />
     ),
     cell: ({ row }) => (
       <span className="max-w-[500px] truncate font-medium">
@@ -45,7 +45,7 @@ export const getWorkoutColumns = (
   {
     accessorKey: "createdAt",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title={t('created')} />
+      <DataTableColumnHeader column={column} title={t("created")} />
     ),
     cell: ({ row }) => (
       <span className="max-w-[500px] truncate font-medium">

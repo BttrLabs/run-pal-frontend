@@ -5,7 +5,7 @@ import {
   ContributionGraphBlock,
   ContributionGraphCalendar,
   ContributionGraphFooter,
-} from "@/components/kibo-ui/contribution-graph";
+} from "@/components/ui/contribution-graph";
 import { eachDayOfInterval, subDays, formatISO } from "date-fns";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";

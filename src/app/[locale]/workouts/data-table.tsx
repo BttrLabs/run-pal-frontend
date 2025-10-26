@@ -32,7 +32,7 @@ import {
   EmptyMedia,
   EmptyTitle,
 } from "@/components/ui/empty";
-import { DataTablePagination } from "@/components/data-table-pagination";
+import { DataTablePagination } from "@/components/data-table/data-table-pagination";
 import { DataTableToolbar } from "@/app/[locale]/workouts/components/data-table-toolbar";
 import Link from "next/link";
 import { Workout } from "@/app/[locale]/workouts/data/schema";

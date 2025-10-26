@@ -22,32 +22,25 @@ import { useCount } from "@/hooks/use-count";
 
 export const description = "A dynamic bar chart";
 
-const chartConfig = {
-  count: {
-    label: "Intervals",
-    color: "var(--chart-1)",
-  },
-} satisfies ChartConfig;
-
 export function TotalIntervalsChart() {
   const { data, isLoading } = useCount(30);
-  const t = useTranslations('Charts');
-  const tCommon = useTranslations('Common');
+  const t = useTranslations("Charts");
+  const tCommon = useTranslations("Common");
 
   const chartConfig = {
     count: {
-      label: t('intervals'),
+      label: t("intervals"),
       color: "var(--chart-1)",
     },
   } satisfies ChartConfig;
 
-  if (isLoading) return <div>{tCommon('loading')}</div>;
+  if (isLoading) return <div>{tCommon("loading")}</div>;
 
   return (
     <Card>
       <CardHeader>
-        <CardTitle>{t('totalIntervals')}</CardTitle>
-        <CardDescription>{t('last30Days')}</CardDescription>
+        <CardTitle>{t("totalIntervals")}</CardTitle>
+        <CardDescription>{t("last30Days")}</CardDescription>
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig}>
@@ -70,11 +63,11 @@ export function TotalIntervalsChart() {
       </CardContent>
       <CardFooter className="flex-col items-start gap-2 text-sm">
         <div className="flex gap-2 leading-none font-medium">
-          {t('trendingUpBy')} {data[data.length - 1]?.trend ?? 0}% {t('thisMonth')}{" "}
-          <TrendingUp className="h-4 w-4" />
+          {t("trendingUpBy")} {data[data.length - 1]?.trend ?? 0}%{" "}
+          {t("thisMonth")} <TrendingUp className="h-4 w-4" />
         </div>
         <div className="text-muted-foreground leading-none">
-          {t('showingTotalIntervals')}
+          {t("showingTotalIntervals")}
         </div>
       </CardFooter>
     </Card>

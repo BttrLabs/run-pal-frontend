@@ -21,25 +21,18 @@ import { useCumulativeDistance } from "@/hooks/use-cumulative-distance";
 
 export const description = "Cumulative distance over time";
 
-const chartConfig = {
-  cumulative_distance: {
-    label: "Cumulative Distance",
-    color: "var(--chart-1)",
-  },
-} satisfies ChartConfig;
-
 export function CumulativeDistanceChartInteractive({
   days = 30,
 }: {
   days?: number;
 }) {
   const { data: chartData, isLoading } = useCumulativeDistance(days);
-  const t = useTranslations('Charts');
-  const tCommon = useTranslations('Common');
+  const t = useTranslations("Charts");
+  const tCommon = useTranslations("Common");
 
   const chartConfig = {
     cumulative_distance: {
-      label: t('cumulativeDistance'),
+      label: t("cumulativeDistance"),
       color: "var(--chart-1)",
     },
   } satisfies ChartConfig;
@@ -49,24 +42,24 @@ export function CumulativeDistanceChartInteractive({
     [chartData],
   );
 
-  const [activeChart, setActiveChart] = React.useState<
-    keyof typeof chartConfig
-  >("cumulative_distance");
+  const [activeChart] = React.useState<keyof typeof chartConfig>(
+    "cumulative_distance",
+  );
 
-  if (isLoading) return <div>{tCommon('loading')}</div>;
+  if (isLoading) return <div>{tCommon("loading")}</div>;
 
   return (
     <Card className="py-4 sm:py-0">
       <CardHeader className="flex flex-col items-stretch border-b sm:flex-row">
         <div className="flex flex-1 flex-col justify-center gap-1 px-6 pb-3 sm:pb-0">
-          <CardTitle>{t('cumulativeDistance')}</CardTitle>
-          <CardDescription>
-            {t('totalDistance', { days })}
-          </CardDescription>
+          <CardTitle>{t("cumulativeDistance")}</CardTitle>
+          <CardDescription>{t("totalDistance", { days })}</CardDescription>
         </div>
         <div className="flex">
           <div className="flex flex-1 flex-col justify-center gap-1 border-t px-6 py-4 text-left sm:border-t-0 sm:border-l sm:px-8 sm:py-6">
-            <span className="text-muted-foreground text-xs">{t('cumulative')}</span>
+            <span className="text-muted-foreground text-xs">
+              {t("cumulative")}
+            </span>
             <span className="text-lg leading-none font-bold sm:text-3xl">
               {total.toLocaleString()}
             </span>
