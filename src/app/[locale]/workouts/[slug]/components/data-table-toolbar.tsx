@@ -2,7 +2,7 @@
 
 import { Table } from "@tanstack/react-table";
 
-import { DataTableViewOptions } from "@/components/data-table-view-options";
+import { DataTableViewOptions } from "@/components/data-table/data-table-view-options";
 
 import { AddInterval } from "@/components/dialogs/add-interval-dialog";
 import { useIntervals } from "@/hooks/use-intervals";
