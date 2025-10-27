@@ -20,12 +20,16 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { useWorkouts } from "@/hooks/use-workouts";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { WorkoutCard } from "@/components/workout-card";
+import { AddWorkout } from "@/components/dialogs/add-workout-dialog";
 
 export default function Page() {
-  const { workouts, deleteWorkout, copyWorkout } = useWorkouts();
-  const t = useTranslations('Navigation');
-  const tWorkouts = useTranslations('Workouts');
+  const { workouts, deleteWorkout, copyWorkout, addWorkout } = useWorkouts();
+  const t = useTranslations("Navigation");
+  const tWorkouts = useTranslations("Workouts");
   const columns = getWorkoutColumns(deleteWorkout, copyWorkout, tWorkouts);
+  const isMobile = useIsMobile();
 
   return (
     <SidebarProvider>
@@ -42,12 +46,12 @@ export default function Page() {
               <BreadcrumbList>
                 <BreadcrumbItem>
                   <BreadcrumbLink asChild>
-                    <Link href="/">{t('home')}</Link>
+                    <Link href="/">{t("home")}</Link>
                   </BreadcrumbLink>
                 </BreadcrumbItem>
                 <BreadcrumbSeparator />
                 <BreadcrumbItem>
-                  <BreadcrumbPage>{t('myWorkouts')}</BreadcrumbPage>
+                  <BreadcrumbPage>{t("myWorkouts")}</BreadcrumbPage>
                 </BreadcrumbItem>
               </BreadcrumbList>
             </Breadcrumb>
@@ -58,14 +62,39 @@ export default function Page() {
             <div className="flex items-center justify-between space-y-2">
               <div>
                 <h2 className="text-2xl font-bold tracking-tight">
-                  {tWorkouts('welcomeBack')}
+                  {tWorkouts("welcomeBack")}
                 </h2>
                 <p className="text-muted-foreground">
-                  {tWorkouts('workoutsList')}
+                  {tWorkouts("workoutsList")}
                 </p>
               </div>
             </div>
-            <DataTable data={workouts} columns={columns} />
+            {!isMobile ? (
+              <DataTable data={workouts} columns={columns} />
+            ) : (
+              <div className="space-y-5">
+                <AddWorkout addWorkout={addWorkout} />
+                <div className="grid gap-4 w-full">
+                  {workouts
+                    .slice() // avoid mutating original array
+                    .sort(
+                      (a, b) =>
+                        new Date(b.createdAt).getTime() -
+                        new Date(a.createdAt).getTime(),
+                    )
+                    .map((workout) => (
+                      <WorkoutCard
+                        key={workout.workout_number}
+                        name={workout.name || ""}
+                        slug={workout.slug || ""}
+                        description={workout.description || ""}
+                        createdAt={workout.createdAt || ""}
+                        training_id={String(workout.workout_number)}
+                      />
+                    ))}
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </SidebarInset>
