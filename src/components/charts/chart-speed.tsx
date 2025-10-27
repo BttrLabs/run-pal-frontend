@@ -77,7 +77,7 @@ export function ChartSpeed({ days = 7 }: { days?: number }) {
       </CardContent>
       <CardFooter className="flex-col items-start gap-2 text-sm">
         <div className="flex gap-2 leading-none font-medium">
-          {trendText} {Math.abs(trend).toFixed(1)}% {t("thisWeek")}
+          {trendText} {Math.abs(trend).toFixed(1)}% {t("thisDay")}
           <TrendIcon className="h-4 w-4" />
         </div>
         <div className="text-muted-foreground leading-none">
