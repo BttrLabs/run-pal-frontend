@@ -73,6 +73,7 @@
     "thisMonth": "this month",
     "thisPeriod": "this period",
     "thisWeek": "this week",
+    "thisDay": "since yesterday",
     "showingCumulativeDistance": "Cumulative total distance over the period",
     "showingTotalDistance": "Distance covered per day in meters",
     "showingAverageSpeed": "Average pace per day in meters per second",
