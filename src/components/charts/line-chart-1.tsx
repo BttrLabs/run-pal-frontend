@@ -1,8 +1,8 @@
 "use client";
 
-import { TrendingUp } from "lucide-react";
+import { TrendingUp, TrendingDown } from "lucide-react";
 import { CartesianGrid, Line, LineChart, XAxis } from "recharts";
-import { useDistance } from "@/hooks/use-distance"; // adjust path
+import { useDistance } from "@/hooks/use-distance";
 import { useTranslations } from "next-intl";
 
 import {
@@ -20,30 +20,34 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 
-export const description = "Cumulative distance line chart";
+export const description = "Distance line chart";
 
 const chartConfig: ChartConfig = {
   distance: { label: "Distance", color: "var(--chart-1)" },
 };
 
 export function ChartDistanceLine({ days }: { days?: number }) {
-  const { data, isLoading } = useDistance(days);
-  const t = useTranslations('Charts');
-  const tCommon = useTranslations('Common');
+  const { data, trend, isLoading } = useDistance(days);
+  const t = useTranslations("Charts");
+  const tCommon = useTranslations("Common");
+
+  if (isLoading) return <div>{tCommon("loading")}</div>;
 
   const formattedData = data.map((d) => ({
     date: d.date,
     distance: d.total_distance,
   }));
 
-  if (isLoading) return <div>{tCommon('loading')}</div>;
+  const TrendIcon = trend >= 0 ? TrendingUp : TrendingDown;
+  const trendText =
+    trend >= 0 ? `+${trend.toFixed(1)}%` : `${trend.toFixed(1)}%`;
 
   return (
     <Card>
       <CardHeader>
-        <CardTitle>{t('distanceChart')}</CardTitle>
+        <CardTitle>{t("distanceChart")}</CardTitle>
         <CardDescription>
-          {days ? t('lastDays', { days }) : t('allTime')}
+          {days ? t("lastDays", { days }) : t("allTime")}
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -63,7 +67,7 @@ export function ChartDistanceLine({ days }: { days?: number }) {
             <Line
               dataKey="distance"
               type="natural"
-              stroke="var(--chart-1)"
+              stroke={chartConfig.distance.color}
               strokeWidth={2}
               dot={false}
             />
@@ -72,11 +76,10 @@ export function ChartDistanceLine({ days }: { days?: number }) {
       </CardContent>
       <CardFooter className="flex-col items-start gap-2 text-sm">
         <div className="flex gap-2 leading-none font-medium">
-          {t('trendingUpBy')} {data[data.length - 1]?.trend?.toFixed(1) ?? 0}% {t('thisPeriod')}
-          <TrendingUp className="h-4 w-4" />
+          {trendText} <TrendIcon className="h-4 w-4" /> today vs yesterday
         </div>
         <div className="text-muted-foreground leading-none">
-          {t('showingCumulativeDistance')}
+          {t("showingCumulativeDistance")}
         </div>
       </CardFooter>
     </Card>
