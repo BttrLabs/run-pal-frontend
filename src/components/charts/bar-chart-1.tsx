@@ -23,7 +23,7 @@ import { useCount } from "@/hooks/use-count";
 export const description = "A dynamic bar chart";
 
 export function TotalIntervalsChart() {
-  const { data, isLoading } = useCount(30);
+  const { data, trend, isLoading } = useCount(30);
   const t = useTranslations("Charts");
   const tCommon = useTranslations("Common");
 
@@ -63,8 +63,8 @@ export function TotalIntervalsChart() {
       </CardContent>
       <CardFooter className="flex-col items-start gap-2 text-sm">
         <div className="flex gap-2 leading-none font-medium">
-          {t("trendingUpBy")} {data[data.length - 1]?.trend ?? 0}%{" "}
-          {t("thisMonth")} <TrendingUp className="h-4 w-4" />
+          {trend >= 0 ? t("trendingUpBy") : t("trendingDownBy")}{" "}
+          {Math.abs(trend)}% {t("today")} <TrendingUp className="h-4 w-4" />
         </div>
         <div className="text-muted-foreground leading-none">
           {t("showingTotalIntervals")}

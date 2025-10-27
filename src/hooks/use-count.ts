@@ -7,34 +7,41 @@ import { toast } from "sonner";
 export type CountPoint = {
   date: string;
   count: number;
-  trend?: number;
+};
+
+export type CountResponse = {
+  data: CountPoint[];
+  trend: number;
 };
 
 export function useCount(days?: number) {
   const query = days ? `?days=${days}` : "";
   const url = `${process.env.NEXT_PUBLIC_API_URL}/stats/count${query}`;
 
-  const fetcher = async () => {
+  const fetcher = async (): Promise<CountResponse> => {
     try {
-      const res = await axios.get<{ data: CountPoint[] }>(url, {
+      const res = await axios.get<CountResponse>(url, {
         withCredentials: true,
       });
-      return res.data.data.map((d) => ({
-        date: d.date,
-        count: Number(d.count),
-        trend: d.trend !== undefined ? Number(d.trend) : 0,
-      }));
+      return {
+        data: res.data.data.map((d) => ({
+          date: d.date,
+          count: Number(d.count),
+        })),
+        trend: Number(res.data.trend),
+      };
     } catch (err) {
-      toast.error("Failed to fetch cumulative distance stats");
+      toast.error("Failed to fetch interval count stats");
       console.error(err);
-      return [];
+      return { data: [], trend: 0 };
     }
   };
 
-  const { data, error, isValidating } = useSWR<CountPoint[]>(url, fetcher);
+  const { data, error, isValidating } = useSWR<CountResponse>(url, fetcher);
 
   return {
-    data: data ?? [],
+    data: data?.data ?? [],
+    trend: data?.trend ?? 0,
     isLoading: !data && isValidating,
     error,
   };

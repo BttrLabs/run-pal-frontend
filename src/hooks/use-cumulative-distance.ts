@@ -7,37 +7,44 @@ import { toast } from "sonner";
 export type CumulativeDistancePoint = {
   date: string;
   cumulative_distance: number;
-  trend?: number;
+};
+
+export type CumulativeDistanceResponse = {
+  data: CumulativeDistancePoint[];
+  trend: number;
 };
 
 export function useCumulativeDistance(days?: number) {
   const query = days ? `?days=${days}` : "";
   const url = `${process.env.NEXT_PUBLIC_API_URL}/stats/cumulative-distance${query}`;
 
-  const fetcher = async () => {
+  const fetcher = async (): Promise<CumulativeDistanceResponse> => {
     try {
-      const res = await axios.get<{ data: CumulativeDistancePoint[] }>(url, {
+      const res = await axios.get<CumulativeDistanceResponse>(url, {
         withCredentials: true,
       });
-      return res.data.data.map((d) => ({
-        date: d.date,
-        cumulative_distance: Number(d.cumulative_distance),
-        trend: d.trend !== undefined ? Number(d.trend) : 0,
-      }));
+      return {
+        data: res.data.data.map((d) => ({
+          date: d.date,
+          cumulative_distance: Number(d.cumulative_distance),
+        })),
+        trend: Number(res.data.trend),
+      };
     } catch (err) {
       toast.error("Failed to fetch cumulative distance stats");
       console.error(err);
-      return [];
+      return { data: [], trend: 0 };
     }
   };
 
-  const { data, error, isValidating } = useSWR<CumulativeDistancePoint[]>(
+  const { data, error, isValidating } = useSWR<CumulativeDistanceResponse>(
     url,
     fetcher,
   );
 
   return {
-    data: data ?? [],
+    data: data?.data ?? [],
+    trend: data?.trend ?? 0,
     isLoading: !data && isValidating,
     error,
   };

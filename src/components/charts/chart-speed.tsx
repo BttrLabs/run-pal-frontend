@@ -19,35 +19,33 @@ import {
 import { useSpeedStats } from "@/hooks/use-speed-stats";
 
 export function ChartSpeed() {
-  const { data, isLoading } = useSpeedStats(7);
-  const t = useTranslations('Charts');
-  const tCommon = useTranslations('Common');
+  const { data, trend, isLoading } = useSpeedStats(7);
+  const t = useTranslations("Charts");
+  const tCommon = useTranslations("Common");
 
-  if (isLoading) return <div>{tCommon('loading')}</div>;
+  if (isLoading) return <div>{tCommon("loading")}</div>;
 
   const chartData = data.map((d) => ({
     day: d.day,
     avg_speed: Math.round(Number(d.avg_speed) * 1000) / 1000,
-    trend: d.trend, // percent change from previous day
   }));
 
   const chartConfig = {
     avg_speed: {
-      label: t('avgSpeedLabel'),
+      label: t("avgSpeedLabel"),
       color: "var(--chart-1)",
     },
   };
 
-  const lastTrend = chartData.at(-1)?.trend ?? 0;
-  const TrendIcon = lastTrend >= 0 ? TrendingUp : TrendingDown;
+  const TrendIcon = trend >= 0 ? TrendingUp : TrendingDown;
   const trendText =
-    lastTrend >= 0 ? `+${lastTrend.toFixed(1)}%` : `${lastTrend.toFixed(1)}%`;
+    trend >= 0 ? `+${trend.toFixed(1)}%` : `${trend.toFixed(1)}%`;
 
   return (
     <Card>
       <CardHeader>
-        <CardTitle>{t('averageSpeed')}</CardTitle>
-        <CardDescription>{t('last7Days')}</CardDescription>
+        <CardTitle>{t("averageSpeed")}</CardTitle>
+        <CardDescription>{t("last7Days")}</CardDescription>
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig}>
@@ -62,7 +60,7 @@ export function ChartSpeed() {
               tickLine={false}
               axisLine={false}
               tickMargin={8}
-              tickFormatter={(value) => value.slice(5)} // MM-DD
+              tickFormatter={(value) => value.slice(5)}
             />
             <ChartTooltip
               cursor={false}
@@ -83,7 +81,7 @@ export function ChartSpeed() {
           {trendText} <TrendIcon className="h-4 w-4" />
         </div>
         <div className="text-muted-foreground leading-none">
-          {t('averageSpeedTrend')}
+          {t("averageSpeedTrend")}: today vs yesterday
         </div>
       </CardFooter>
     </Card>
