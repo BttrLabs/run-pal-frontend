@@ -14,18 +14,17 @@ export type DistanceResponse = {
   trend: number;
 };
 
-export function useDistance(days?: number) {
-  const query = days ? `?days=${days}` : "";
-  const url = `${process.env.NEXT_PUBLIC_API_URL}/stats/distance${query}`;
+export function useDistance(days: number = 7) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/stats/distance?days=${days}`;
 
   const fetcher = async (): Promise<DistanceResponse> => {
     try {
-      const res = await axios.get<DistanceResponse>(url, {
+      const res = await axios.get<{ data: Array<{ day: string; total_distance: number }>; trend: number }>(url, {
         withCredentials: true,
       });
       return {
         data: res.data.data.map((d) => ({
-          date: d.date,
+          date: d.day,
           total_distance: Number(d.total_distance),
         })),
         trend: Number(res.data.trend),
