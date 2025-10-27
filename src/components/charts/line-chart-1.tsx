@@ -26,7 +26,7 @@ const chartConfig: ChartConfig = {
   distance: { label: "Distance", color: "var(--chart-1)" },
 };
 
-export function ChartDistanceLine({ days }: { days?: number }) {
+export function ChartDistanceLine({ days = 7 }: { days?: number }) {
   const { data, trend, isLoading } = useDistance(days);
   const t = useTranslations("Charts");
   const tCommon = useTranslations("Common");
@@ -39,15 +39,14 @@ export function ChartDistanceLine({ days }: { days?: number }) {
   }));
 
   const TrendIcon = trend >= 0 ? TrendingUp : TrendingDown;
-  const trendText =
-    trend >= 0 ? `+${trend.toFixed(1)}%` : `${trend.toFixed(1)}%`;
+  const trendText = trend >= 0 ? t("trendingUpBy") : t("trendingDownBy");
 
   return (
     <Card>
       <CardHeader>
         <CardTitle>{t("distanceChart")}</CardTitle>
         <CardDescription>
-          {days ? t("lastDays", { days }) : t("allTime")}
+          {t("lastDays", { days })}
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -59,6 +58,7 @@ export function ChartDistanceLine({ days }: { days?: number }) {
               tickLine={false}
               axisLine={false}
               tickMargin={8}
+              tickFormatter={(value) => value.slice(5)}
             />
             <ChartTooltip
               cursor={false}
@@ -76,10 +76,11 @@ export function ChartDistanceLine({ days }: { days?: number }) {
       </CardContent>
       <CardFooter className="flex-col items-start gap-2 text-sm">
         <div className="flex gap-2 leading-none font-medium">
-          {trendText} <TrendIcon className="h-4 w-4" /> today vs yesterday
+          {trendText} {Math.abs(trend).toFixed(1)}% {t("thisWeek")}
+          <TrendIcon className="h-4 w-4" />
         </div>
         <div className="text-muted-foreground leading-none">
-          {t("showingCumulativeDistance")}
+          {t("showingTotalDistance")}
         </div>
       </CardFooter>
     </Card>

@@ -1,6 +1,6 @@
 "use client";
 
-import { TrendingUp } from "lucide-react";
+import { TrendingUp, TrendingDown } from "lucide-react";
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 import { useTranslations } from "next-intl";
 
@@ -22,8 +22,8 @@ import { useCount } from "@/hooks/use-count";
 
 export const description = "A dynamic bar chart";
 
-export function TotalIntervalsChart() {
-  const { data, trend, isLoading } = useCount(30);
+export function TotalIntervalsChart({ days = 7 }: { days?: number }) {
+  const { data, trend, isLoading } = useCount(days);
   const t = useTranslations("Charts");
   const tCommon = useTranslations("Common");
 
@@ -36,11 +36,14 @@ export function TotalIntervalsChart() {
 
   if (isLoading) return <div>{tCommon("loading")}</div>;
 
+  const TrendIcon = trend >= 0 ? TrendingUp : TrendingDown;
+  const trendText = trend >= 0 ? t("trendingUpBy") : t("trendingDownBy");
+
   return (
     <Card>
       <CardHeader>
         <CardTitle>{t("totalIntervals")}</CardTitle>
-        <CardDescription>{t("last30Days")}</CardDescription>
+        <CardDescription>{t("lastDays", { days })}</CardDescription>
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig}>
@@ -63,8 +66,8 @@ export function TotalIntervalsChart() {
       </CardContent>
       <CardFooter className="flex-col items-start gap-2 text-sm">
         <div className="flex gap-2 leading-none font-medium">
-          {trend >= 0 ? t("trendingUpBy") : t("trendingDownBy")}{" "}
-          {Math.abs(trend)}% {t("today")} <TrendingUp className="h-4 w-4" />
+          {trendText} {Math.abs(trend).toFixed(1)}% {t("thisWeek")}
+          <TrendIcon className="h-4 w-4" />
         </div>
         <div className="text-muted-foreground leading-none">
           {t("showingTotalIntervals")}

@@ -18,8 +18,8 @@ import {
 } from "@/components/ui/chart";
 import { useSpeedStats } from "@/hooks/use-speed-stats";
 
-export function ChartSpeed() {
-  const { data, trend, isLoading } = useSpeedStats(7);
+export function ChartSpeed({ days = 7 }: { days?: number }) {
+  const { data, trend, isLoading } = useSpeedStats(days);
   const t = useTranslations("Charts");
   const tCommon = useTranslations("Common");
 
@@ -38,14 +38,13 @@ export function ChartSpeed() {
   };
 
   const TrendIcon = trend >= 0 ? TrendingUp : TrendingDown;
-  const trendText =
-    trend >= 0 ? `+${trend.toFixed(1)}%` : `${trend.toFixed(1)}%`;
+  const trendText = trend >= 0 ? t("trendingUpBy") : t("trendingDownBy");
 
   return (
     <Card>
       <CardHeader>
         <CardTitle>{t("averageSpeed")}</CardTitle>
-        <CardDescription>{t("last7Days")}</CardDescription>
+        <CardDescription>{t("lastDays", { days })}</CardDescription>
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig}>
@@ -78,10 +77,11 @@ export function ChartSpeed() {
       </CardContent>
       <CardFooter className="flex-col items-start gap-2 text-sm">
         <div className="flex gap-2 leading-none font-medium">
-          {trendText} <TrendIcon className="h-4 w-4" />
+          {trendText} {Math.abs(trend).toFixed(1)}% {t("thisWeek")}
+          <TrendIcon className="h-4 w-4" />
         </div>
         <div className="text-muted-foreground leading-none">
-          {t("averageSpeedTrend")}: today vs yesterday
+          {t("showingAverageSpeed")}
         </div>
       </CardFooter>
     </Card>

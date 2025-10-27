@@ -14,9 +14,8 @@ export type SpeedStatsResponse = {
   trend: number;
 };
 
-export function useSpeedStats(days?: number) {
-  const query = days ? `?days=${days}` : "";
-  const url = `${process.env.NEXT_PUBLIC_API_URL}/stats/speed${query}`;
+export function useSpeedStats(days: number = 7) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/stats/speed?days=${days}`;
 
   const fetcher = async (): Promise<SpeedStatsResponse> => {
     try {

@@ -14,18 +14,17 @@ export type CountResponse = {
   trend: number;
 };
 
-export function useCount(days?: number) {
-  const query = days ? `?days=${days}` : "";
-  const url = `${process.env.NEXT_PUBLIC_API_URL}/stats/count${query}`;
+export function useCount(days: number = 7) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/stats/count?days=${days}`;
 
   const fetcher = async (): Promise<CountResponse> => {
     try {
-      const res = await axios.get<CountResponse>(url, {
+      const res = await axios.get<{ data: Array<{ day: string; count: number }>; trend: number }>(url, {
         withCredentials: true,
       });
       return {
         data: res.data.data.map((d) => ({
-          date: d.date,
+          date: d.day,
           count: Number(d.count),
         })),
         trend: Number(res.data.trend),
